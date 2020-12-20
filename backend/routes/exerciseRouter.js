@@ -24,7 +24,7 @@ exerciseRouter.route('/add')
      const duration = Number(req.body.duration);
      const date = Date.parse(req.body.date);
 
-     const newExercise = new User({
+     const newExercise = new Exercise({
           username,
           description,
           duration,
@@ -32,10 +32,49 @@ exerciseRouter.route('/add')
      });
      
      newExercise.save()
-     .then(users => {
+     .then(exercise => {
           res.statusCode = 200;
           res.setHeader('Content-Type', 'application/json');
           res.json('Exercise added successfully..');
+     })
+     .catch(err => {
+          res.statusCode = 400;
+          res.json('Error: ' + err);
+     })
+});
+
+exerciseRouter.route('/:id')
+.get((req, res) => {
+     Exercise.findById(req.params.id)
+     .then(exercise =>{
+          res.statusCode = 200;
+          res.setHeader('Content-Type', 'application/json');
+          res.json(exercise);
+     })
+     .catch(err => {
+          res.statusCode = 400;
+          res.json('Error: ' + err);
+     })
+})
+.put((req, res) => {
+     Exercise.findById(req.params.id)
+     .then(exercise =>{
+          res.statusCode = 200;
+          res.setHeader('Content-Type', 'application/json');
+          res.json("Exercise Updated: " + exercise);
+     })
+     .catch(err => {
+          res.statusCode = 400;
+          res.json('Error: ' + err);
+     })
+})
+
+.delete((req, res) => {
+     Exercise.findByIdAndDelete(req.params.id)
+     .then(exercise => {
+          res.statusCode = 200;
+          res.setHeader('Content-Type', 'application/json');
+          res.json("Exercise Deleted: " + exercise);
      })
      .catch(err => {
           res.statusCode = 400;
